@@ -138,6 +138,22 @@ python main.py
 
 ---
 
+---
+
+## 🙏 致谢 | Acknowledgements
+
+本项目站在巨人的肩膀上，特别感谢以下优秀的开源库与工具：
+Special thanks to these amazing open-source projects and tools:
+
+* **[uiautomation](https://github.com/yinkaisheng/Python-UIAutomation-for-Windows)**: 提供了核心的屏幕取词能力 (The core magic behind text picking).
+* **[PyQt5](https://www.riverbankcomputing.com/software/pyqt/)**: 强大且稳定的 GUI 框架 (Robust GUI framework).
+* **[deep-translator](https://github.com/nidhaloff/deep-translator)**: 便捷的翻译接口封装 (Easy-to-use translation API wrapper).
+* **AI Co-pilot**: 代码逻辑与文档构建由 **Claude 4.5 Sonnet** & **Gemini 3 Pro** 辅助完成 (Code & Docs assisted by AI).
+
+---
+
 <div align="center">
+  <p>Made with ❤️ by <b>Zhu Siyuan</b></p>
+  <div align="center">
   <p>If you like this project, please give it a ⭐ <b>Star</b>!<br>如果你喜欢这个项目，请点亮 ⭐ <b>Star</b> 支持一下！</p>
 </div>
