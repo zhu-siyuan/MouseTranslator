@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MouseTranslator 软件架构时序图 (Dark)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0d1117;
+            /* GitHub Dark Background */
+            color: #c9d1d9;
+        }
+
+        .container {
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background-color: #0d1117;
+        }
+
+        h1 {
+            color: #c9d1d9;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>MouseTranslator 系统时序交互图</h1>
+        <div class="mermaid">
+            sequenceDiagram
+            autonumber
+            participant U as 用户 (User)
+            participant M as 鼠标监听器 (MouseMonitor)
+            participant C as 主控制器 (MainController)
+            participant V as 悬浮窗视图 (Overlay)
+            participant S as 翻译服务 (TranslationService)
+            participant A as Google翻译API
+
+            Note over U, M: 交互开始
+
+            U->>M: 1. 移动并悬停鼠标
+            activate M
+            Note right of M: 判定: 静止超过阈值(100ms)
+
+            M->>M: 2. 调用 UIAutomation<br />获取屏幕当前位置文本
+
+            alt 未获取到文本
+            M-->>U: 保持静默
+            else 获取到文本
+            M->>C: 3. 发送信号 text_found(text)
+            activate C
+
+            C->>V: 4. update_content(text, loading=True)
+            activate V
+            V->>V: 调整位置与尺寸
+            V-->>U: 5. 显示"正在翻译..."悬浮窗
+            deactivate V
+
+            C->>S: 6. translate(text)
+            activate S
+
+            S->>S: 检查本地缓存(Cache)
+
+            alt 缓存命中
+            S-->>S: 读取缓存结果
+            else 缓存未命中
+            S->>A: 7. 发送 HTTP 请求
+            activate A
+            A-->>S: 8. 返回 JSON 数据
+            deactivate A
+            S->>S: 写入缓存
+            end
+
+            S-->>C: 9. 发送信号 translation_finished
+            deactivate S
+
+            C->>V: 10. update_content(original, result)
+            activate V
+            V->>V: 重新计算布局
+            V-->>U: 11. 显示最终翻译结果
+            deactivate V
+
+            deactivate C
+            end
+            deactivate M
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            themeVariables: {
+                darkMode: true,
+                background: '#0d1117',
+                fontFamily: 'Segoe UI',
+                fontSize: '16px',
+                primaryColor: '#1f6feb',
+                primaryTextColor: '#c9d1d9',
+                primaryBorderColor: '#1f6feb',
+                lineColor: '#8b949e',
+                secondaryColor: '#161b22',
+                tertiaryColor: '#161b22',
+                noteBkgColor: '#1f6feb',
+                noteTextColor: '#ffffff',
+                noteBorderColor: '#30363d',
+                actorBkg: '#161b22',
+                actorBorder: '#8b949e',
+                actorTextColor: '#c9d1d9',
+                activationBkgColor: '#238636',
+                signalColor: '#8b949e',
+                signalTextColor: '#c9d1d9',
+                loopTextColor: '#c9d1d9'
+            }
+        });
+    </script>
+</body>
+
+</html>

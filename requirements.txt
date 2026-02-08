@@ -1,0 +1,12 @@
+# MouseTranslator BasicVersion (青春版) 依赖包列表
+
+# ========== 核心依赖 ==========
+
+# PyQt5 - GUI 框架
+PyQt5>=5.15.0
+
+# uiautomation - Windows UI 自动化
+uiautomation>=2.0.0
+
+# deep-translator - Google 翻译引擎
+deep-translator>=1.11.0

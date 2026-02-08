@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MouseTranslator Architecture Sequence Diagram (Dark)</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0d1117;
+            /* GitHub Dark Background */
+            color: #c9d1d9;
+        }
+
+        .container {
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background-color: #0d1117;
+        }
+
+        h1 {
+            color: #c9d1d9;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>MouseTranslator System Sequence Diagram</h1>
+        <div class="mermaid">
+            sequenceDiagram
+            autonumber
+            participant U as User
+            participant M as MouseMonitor
+            participant C as MainController
+            participant V as Overlay (View)
+            participant S as TranslationService
+            participant A as Google API
+
+            Note over U, M: Interaction Start
+
+            U->>M: 1. Mouse Hover
+            activate M
+            Note right of M: Check: Stopped > Threshold
+
+            M->>M: 2. Call UIAutomation<br />Get Text at Cursor
+
+            alt No Text Found
+            M-->>U: Do Nothing
+            else Text Found
+            M->>C: 3. Emit Signal text_found(text)
+            activate C
+
+            C->>V: 4. update_content(text, loading=True)
+            activate V
+            V->>V: Adjust Position & Size
+            V-->>U: 5. Show "Translating..." Window
+            deactivate V
+
+            C->>S: 6. translate(text)
+            activate S
+
+            S->>S: Check Local Cache
+
+            alt Cache Hit
+            S-->>S: Retrieve from Cache
+            else Cache Miss
+            S->>A: 7. Send HTTP Request
+            activate A
+            A-->>S: 8. Return JSON Data
+            deactivate A
+            S->>S: Write to Cache
+            end
+
+            S-->>C: 9. Emit Signal translation_finished
+            deactivate S
+
+            C->>V: 10. update_content(original, result)
+            activate V
+            V->>V: Recalculate Layout
+            V-->>U: 11. Display Final Result
+            deactivate V
+
+            deactivate C
+            end
+            deactivate M
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            themeVariables: {
+                darkMode: true,
+                background: '#0d1117',
+                fontFamily: 'Segoe UI',
+                fontSize: '16px',
+                primaryColor: '#1f6feb',
+                primaryTextColor: '#c9d1d9',
+                primaryBorderColor: '#1f6feb',
+                lineColor: '#8b949e',
+                secondaryColor: '#161b22',
+                tertiaryColor: '#161b22',
+                noteBkgColor: '#1f6feb',
+                noteTextColor: '#ffffff',
+                noteBorderColor: '#30363d',
+                actorBkg: '#161b22',
+                actorBorder: '#8b949e',
+                actorTextColor: '#c9d1d9',
+                activationBkgColor: '#238636',
+                signalColor: '#8b949e',
+                signalTextColor: '#c9d1d9',
+                loopTextColor: '#c9d1d9'
+            }
+        });
+    </script>
+</body>
+
+</html>
