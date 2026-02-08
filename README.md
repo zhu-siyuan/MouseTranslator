@@ -60,7 +60,7 @@ python main.py
 ```
 
 <div align="center">
-  <img src="./docs/framework_structure_en.png" width="600px" alt="System Architecture">
+  <img src="./docs/framework_structure_en.png" alt="System Architecture">
 </div>
 
 ### 📜 License & Contact
@@ -122,7 +122,7 @@ python main.py
 ```
 
 <div align="center">
-  <img src="./docs/framework_structure_cn.png" width="600px" alt="系统架构图">
+  <img src="./docs/framework_structure_cn.png" alt="系统架构图">
 </div>
 
 - **Input Layer**: `mouse_monitor.py` - 负责监听鼠标轨迹与静止事件。
